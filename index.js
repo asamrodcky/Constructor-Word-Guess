@@ -13,6 +13,8 @@ var w = "";
 var guess = "";
 var numGuesses = 5;
 var alreadyGuessed = [];
+var numWins = 0;
+var numLosses = 0;
 
 var renderWord = function(){
     randWord = wordArr[Math.floor(Math.random() * 5)].toLowerCase();
@@ -26,6 +28,7 @@ w.displayedWord();
 var resetRound = function (){
     numGuesses = 5;
     alreadyGuessed = [];
+    console.log("Remember, the category is streetwear brands.")
     renderWord();
     w.displayedWord();  
 }
@@ -51,6 +54,7 @@ var tryAgain = function(){
 
 var playRound = function(){
     console.log("Number of Guesses: " + numGuesses)
+    console.log("Number of Wins: " + numWins + "\nNumber of Losses: " + numLosses)
     if(numGuesses > 0){
         inquirer
         .prompt([
@@ -81,6 +85,7 @@ var playRound = function(){
             }
             else if(w.display.join("")===randWord){
                 console.log("YOU'VE WON!")
+                numWins++
                 tryAgain();
             }
             else{
@@ -90,6 +95,7 @@ var playRound = function(){
     }
     else{
         console.log("You're all out of guesses, take this L.")
+        numLosses++
         tryAgain();
     } 
 }
