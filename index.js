@@ -10,6 +10,9 @@ renderIntro();
 var wordArr = ["Nike","Adidas","Supreme","Palace","Champion"];
 var randWord = "";
 var w = "";
+var guess = "";
+var numGuesses = 5;
+var alreadyGuessed = [];
 
 var renderWord = function(){
     randWord = wordArr[Math.floor(Math.random() * 5)].toLowerCase();
@@ -20,13 +23,34 @@ renderWord();
 
 w.displayedWord();
 
-var guess = ""
-var numGuesses = 5;
-var alreadyGuessed = []
-console.log("Number of Guesses: " + numGuesses)
+var resetRound = function (){
+    numGuesses = 5;
+    alreadyGuessed = [];
+    renderWord();
+    w.displayedWord();  
+}
+
+var tryAgain = function(){
+    inquirer
+    .prompt([{
+        type: "list",
+        message: "Try Again?",
+        choices: ["Yes", "No"],
+        name: "confirm"
+    }])
+    .then(function(input){
+        if(input.confirm==="Yes"){
+            resetRound();
+            playRound();
+        }
+        else{
+            console.log("Come again next time to lose :)")
+        }
+    })
+}
 
 var playRound = function(){
-
+    console.log("Number of Guesses: " + numGuesses)
     if(numGuesses > 0){
         inquirer
         .prompt([
@@ -53,27 +77,20 @@ var playRound = function(){
             w.displayedWord();
             if(!w.display.includes(guess)){
                 numGuesses--
+                playRound();
             }
-
-            if(w.display.join("")===randWord){
-                console.log("YOU'VE WON! Get ready for the next round.")
-                numGuesses = 5;
-                alreadyGuessed = []
-                renderWord();
-                w.displayedWord();
+            else if(w.display.join("")===randWord){
+                console.log("YOU'VE WON!")
+                tryAgain();
             }
-            console.log("Number of Guesses: " + numGuesses)
-            playRound();
+            else{
+                playRound();
+            }
         });
     }
     else{
-        console.log("You're all out of guesses, take this L. Get ready for the next round.")
-        numGuesses = 5;
-        alreadyGuessed = [];
-        renderWord();
-        w.displayedWord();
-        console.log("Number of Guesses: " + numGuesses);
-        playRound();
+        console.log("You're all out of guesses, take this L.")
+        tryAgain();
     } 
 }
 
